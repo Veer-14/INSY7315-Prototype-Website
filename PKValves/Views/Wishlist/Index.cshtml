@@ -1,0 +1,592 @@
+﻿@model IEnumerable<PKValves.Models.Product>
+
+@{
+    ViewData["Title"] = "My Wishlist";
+}
+
+<section class="wishlist-page">
+
+    <div class="section-container">
+
+
+        <!-- HEADER -->
+
+        <div class="wishlist-header">
+
+            <span class="section-label">
+                MY ACCOUNT
+            </span>
+
+            <h1>
+                My <span>Wishlist.</span>
+            </h1>
+
+            <p>
+                Products you've saved for later.
+                Compare products and find the right
+                solution for your needs.
+            </p>
+
+        </div>
+
+
+        @if (!Model.Any())
+        {
+
+            <div class="wishlist-empty">
+
+                <div class="wishlist-empty-icon">
+                    ♡
+                </div>
+
+                <h2>
+                    Your wishlist is empty.
+                </h2>
+
+                <p>
+                    Browse our products and save the
+                    products you're interested in.
+                </p>
+
+                <a asp-controller="Products"
+                   asp-action="Index"
+                   class="btn btn-primary">
+
+                    Browse Products
+                    <span>→</span>
+
+                </a>
+
+            </div>
+
+        }
+        else
+        {
+
+            <div class="wishlist-grid">
+
+                @foreach (var product in Model)
+                {
+
+                    <div class="wishlist-card">
+
+                        <div class="wishlist-image">
+
+                            <img src="@product.Image"
+                                 alt="@product.Name" />
+
+                            <span class="product-category">
+                                @product.Category
+                            </span>
+
+                        </div>
+
+
+                        <div class="wishlist-content">
+
+                            <h3>
+                                @product.Name
+                            </h3>
+
+                            <p>
+                                @product.Description
+                            </p>
+
+
+                            <div class="wishlist-actions">
+
+                                <a asp-controller="Products"
+                                   asp-action="Details"
+                                   asp-route-id="@product.Id"
+                                   class="product-link">
+
+                                    View Details
+                                    <span>→</span>
+
+                                </a>
+
+
+                                <button type="button"
+                                        class="wishlist-compare-btn"
+                                        onclick="openCompareModal(@product.Id)">
+
+                                    Compare
+
+                                </button>
+
+                            </div>
+
+
+                            <a asp-controller="Wishlist"
+                               asp-action="Remove"
+                               asp-route-id="@product.Id"
+                               class="wishlist-remove">
+
+                                Remove from wishlist
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                }
+
+            </div>
+
+        }
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     COMPARE MODAL
+===================================================== -->
+
+<div class="compare-modal"
+     id="compareModal">
+
+    <div class="compare-modal-overlay"
+         onclick="closeCompareModal()">
+    </div>
+
+
+    <div class="compare-window">
+
+
+        <button type="button"
+                class="compare-close"
+                onclick="closeCompareModal()">
+
+            ×
+
+        </button>
+
+
+        <div class="compare-header">
+
+            <span class="section-label">
+                PRODUCT COMPARISON
+            </span>
+
+            <h2>
+                Compare Products
+            </h2>
+
+            <p>
+                Select another product to compare
+                with your saved product.
+            </p>
+
+        </div>
+
+
+        <!-- CURRENT PRODUCT -->
+
+        <div class="compare-current">
+
+            <div class="compare-current-image">
+
+                <img id="compareCurrentImage"
+                     src=""
+                     alt="" />
+
+            </div>
+
+            <div class="compare-current-info">
+
+                <small>
+                    Your Product
+                </small>
+
+                <h3 id="compareCurrentName">
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <!-- SEARCH -->
+
+        <div class="compare-search-section">
+
+            <label class="compare-search-label">
+                Search for a product
+            </label>
+
+            <div class="compare-search-box">
+
+                <input type="text"
+                       id="compareSearch"
+                       placeholder="Search products..." />
+
+                <span class="compare-search-icon">
+                    ⌕
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESULTS -->
+
+        <div class="compare-results"
+             id="compareResults">
+
+            @foreach (var product in
+                        PKValves.Controllers.ProductsController.GetProducts())
+            {
+
+                <div class="compare-result"
+                     data-id="@product.Id"
+                     data-name="@product.Name.ToLower()"
+                     onclick="selectCompareProduct(
+                             @product.Id,
+                             '@product.Name',
+                             '@product.Image',
+                             '@product.Category'
+                         )">
+
+                    <div class="compare-result-image">
+
+                        <img src="@product.Image"
+                             alt="@product.Name" />
+
+                    </div>
+
+                    <div class="compare-result-info">
+
+                        <h4>
+                            @product.Name
+                        </h4>
+
+                        <span>
+                            @product.Category
+                        </span>
+
+                    </div>
+
+                </div>
+
+            }
+
+        </div>
+
+
+        <div class="compare-no-results"
+             id="compareNoResults">
+
+            No products found.
+
+        </div>
+
+
+        <!-- SELECTED PRODUCT -->
+
+        <div class="compare-selected"
+             id="compareSelected">
+
+            <div class="compare-selected-image">
+
+                <img id="selectedCompareImage"
+                     src=""
+                     alt="" />
+
+            </div>
+
+            <div class="compare-selected-info">
+
+                <small>
+                    Selected Product
+                </small>
+
+                <h4 id="selectedCompareName">
+                </h4>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        <div class="compare-action">
+
+            <button type="button"
+                    class="compare-cancel"
+                    onclick="closeCompareModal()">
+
+                Cancel
+
+            </button>
+
+            <button type="button"
+                    class="compare-submit"
+                    onclick="goToComparison()">
+
+                Compare
+                <span>→</span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        let currentProductId = null;
+
+        let selectedProductId = null;
+
+
+        /*
+            PRODUCT INFORMATION
+        */
+
+        const products = {
+
+            @foreach (var product in
+                                                    PKValves.Controllers.ProductsController.GetProducts())
+            {
+                    <text>
+
+                    @product.Id: {
+                        id: @product.Id,
+                        name: "@product.Name",
+                        image: "@product.Image",
+                        category: "@product.Category"
+                    },
+
+                    </text>
+            }
+
+        };
+
+
+        /*
+            OPEN MODAL
+        */
+
+        function openCompareModal(productId) {
+
+            currentProductId = productId;
+
+            selectedProductId = null;
+
+
+            const product =
+                products[productId];
+
+
+            document.getElementById(
+                "compareCurrentImage"
+            ).src = product.image;
+
+
+            document.getElementById(
+                "compareCurrentName"
+            ).textContent = product.name;
+
+
+            document.getElementById(
+                "compareSearch"
+            ).value = "";
+
+
+            document.getElementById(
+                "compareSelected"
+            ).classList.remove("active");
+
+
+            document.getElementById(
+                "compareModal"
+            ).classList.add("active");
+
+
+            document.body.style.overflow = "hidden";
+
+
+            filterCompareProducts();
+
+        }
+
+
+        /*
+            CLOSE MODAL
+        */
+
+        function closeCompareModal() {
+
+            document.getElementById(
+                "compareModal"
+            ).classList.remove("active");
+
+
+            document.body.style.overflow = "";
+
+        }
+
+
+        /*
+            SEARCH
+        */
+
+        document.getElementById(
+            "compareSearch"
+        ).addEventListener(
+            "input",
+            filterCompareProducts
+        );
+
+
+        function filterCompareProducts() {
+
+            const search =
+                document.getElementById(
+                    "compareSearch"
+                ).value.toLowerCase();
+
+
+            const results =
+                document.querySelectorAll(
+                    ".compare-result"
+                );
+
+
+            let count = 0;
+
+
+            results.forEach(function (result) {
+
+                const id =
+                    parseInt(result.dataset.id);
+
+
+                const name =
+                    result.dataset.name;
+
+
+                if (
+                    id === currentProductId
+                ) {
+
+                    result.style.display = "none";
+
+                    return;
+
+                }
+
+
+                if (name.includes(search)) {
+
+                    result.style.display = "flex";
+
+                    count++;
+
+                }
+                else {
+
+                    result.style.display = "none";
+
+                }
+
+            });
+
+
+            document.getElementById(
+                "compareNoResults"
+            ).classList.toggle(
+                "active",
+                count === 0
+            );
+
+        }
+
+
+        /*
+            SELECT PRODUCT
+        */
+
+        function selectCompareProduct(
+            id,
+            name,
+            image,
+            category
+        ) {
+
+            selectedProductId = id;
+
+
+            document.getElementById(
+                "selectedCompareImage"
+            ).src = image;
+
+
+            document.getElementById(
+                "selectedCompareName"
+            ).textContent = name;
+
+
+            document.getElementById(
+                "compareSelected"
+            ).classList.add("active");
+
+        }
+
+
+        /*
+            GO TO COMPARISON
+        */
+
+        function goToComparison() {
+
+            if (!selectedProductId) {
+
+                alert(
+                    "Please select a product to compare."
+                );
+
+                return;
+
+            }
+
+
+            window.location.href =
+                "/Compare/Index?product1="
+                + currentProductId
+                + "&product2="
+                + selectedProductId;
+
+        }
+
+
+        /*
+            ESC KEY
+        */
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (event.key === "Escape") {
+
+                    closeCompareModal();
+
+                }
+
+            }
+        );
+
+    </script>
+
+}

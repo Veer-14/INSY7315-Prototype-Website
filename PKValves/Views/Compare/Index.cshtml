@@ -1,0 +1,166 @@
+﻿@using PKValves.Models
+
+@{
+    ViewData["Title"] = "Compare Products";
+
+    Product product1 = ViewBag.Product1;
+    Product product2 = ViewBag.Product2;
+}
+
+
+<section class="comparison-page">
+
+    <div class="section-container">
+
+
+        <div class="comparison-header">
+
+            <span class="section-label">
+                PRODUCT COMPARISON
+            </span>
+
+            <h1>
+                Compare <span>Products.</span>
+            </h1>
+
+            <p>
+                Compare the key specifications of
+                your selected PK Valves products to
+                help find the right solution.
+            </p>
+
+        </div>
+
+
+        <!-- PRODUCTS -->
+
+        <div class="comparison-grid">
+
+
+            <!-- PRODUCT 1 -->
+
+            <div class="comparison-card">
+
+                <div class="comparison-card-image">
+
+                    <img src="@product1.Image"
+                         alt="@product1.Name" />
+
+                </div>
+
+
+                <div class="comparison-card-content">
+
+                    <span class="product-category">
+                        @product1.Category
+                    </span>
+
+                    <h2>
+                        @product1.Name
+                    </h2>
+
+                    <p>
+                        @product1.Description
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT 2 -->
+
+            <div class="comparison-card">
+
+                <div class="comparison-card-image">
+
+                    <img src="@product2.Image"
+                         alt="@product2.Name" />
+
+                </div>
+
+
+                <div class="comparison-card-content">
+
+                    <span class="product-category">
+                        @product2.Category
+                    </span>
+
+                    <h2>
+                        @product2.Name
+                    </h2>
+
+                    <p>
+                        @product2.Description
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SPECIFICATIONS -->
+
+        <div class="comparison-details">
+
+
+            <div class="comparison-detail-row">
+
+                <div class="comparison-detail-label">
+                    Category
+                </div>
+
+                <div class="comparison-detail-value">
+                    @product1.Category
+                </div>
+
+                <div class="comparison-detail-value">
+                    @product2.Category
+                </div>
+
+            </div>
+
+
+    
+
+            </div>
+
+
+
+
+
+
+           
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        <div class="comparison-actions">
+
+            <a asp-controller="Wishlist"
+               asp-action="Index"
+               class="compare-back">
+
+                ← Back to Wishlist
+
+            </a>
+
+
+            <a asp-controller="Contact"
+               asp-action="Index"
+               class="btn btn-primary">
+
+                Request Information
+                <span>→</span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>

@@ -1,0 +1,177 @@
+﻿@model PKValves.Models.User
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<section class="auth-page">
+
+    <div class="auth-container">
+
+        <!-- LEFT SIDE -->
+
+        <div class="auth-image">
+
+            <div class="auth-image-overlay"></div>
+
+            <div class="auth-image-content">
+
+                <span class="section-label">
+                    PK VALVES
+                </span>
+
+                <h1>
+                    Welcome<br />
+                    <span>back.</span>
+                </h1>
+
+                <p>
+                    Sign in to access your PK Valves
+                    account and explore our products
+                    and solutions.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+
+        <div class="auth-form-container">
+
+            <div class="auth-form">
+
+                <span class="section-label">
+                    ACCOUNT LOGIN
+                </span>
+
+                <h2>
+                    Sign in
+                </h2>
+
+                <p class="auth-subtitle">
+                    Enter your details below to continue.
+                </p>
+                @if (TempData["Success"] != null)
+                {
+                    <div class="auth-success">
+                        @TempData["Success"]
+                    </div>
+                }
+
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="auth-error">
+                        @ViewBag.Error
+                    </div>
+                }
+
+
+                <form asp-controller="Account"
+                      asp-action="Login"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email Address
+                        </label>
+
+                        <input type="email"
+                               id="email"
+                               name="email"
+                               placeholder="Enter your email address"
+                               required />
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="form-group">
+
+                        <div class="form-label-row">
+
+                            <label for="password">
+                                Password
+                            </label>
+
+                            <a href="#">
+                                Forgot password?
+                            </a>
+
+                        </div>
+
+                        <input type="password"
+                               id="password"
+                               name="password"
+                               placeholder="Enter your password"
+                               required />
+
+                    </div>
+
+
+                    <!-- REMEMBER -->
+
+                    <div class="remember-row">
+
+                        <label class="checkbox-label">
+
+                            <input type="checkbox"
+                                   name="rememberMe" />
+
+                            <span>
+                                Remember me
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- LOGIN -->
+
+                    <button type="submit"
+                            class="auth-submit">
+
+                        Sign In
+
+                        <span>→</span>
+
+                    </button>
+
+                </form>
+
+
+                <div class="auth-divider">
+                    <span>OR</span>
+                </div>
+
+
+                <p class="auth-switch">
+
+                    Don't have an account?
+
+                    <a asp-controller="Account"
+                       asp-action="Register">
+
+                        Create an account
+
+                    </a>
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

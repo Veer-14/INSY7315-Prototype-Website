@@ -1,0 +1,301 @@
+﻿@model IEnumerable<PKValves.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<section class="products-hero">
+
+    <div class="products-hero-overlay"></div>
+
+    <div class="products-hero-content">
+
+        <span class="section-label products-label">
+            PK VALVES cc
+        </span>
+
+        <h1>
+            Our <span>Products.</span>
+        </h1>
+
+        <p>
+            Explore our range of valves, pipes, hoses,
+            pumps, tanks and plumbing solutions.
+        </p>
+
+    </div>
+
+</section>
+
+
+<section class="catalogue-section">
+
+    <div class="section-container">
+
+        <div class="catalogue-header">
+
+            <div>
+
+                <span class="section-label">
+                    PRODUCT CATALOGUE
+                </span>
+
+                <h2>
+                    Find the right solution.
+                </h2>
+
+            </div>
+
+            <p>
+                Browse our range of products designed
+                for industrial, commercial and plumbing
+                applications.
+            </p>
+
+        </div>
+
+
+        <!-- CATEGORY FILTER -->
+
+        <div class="category-filters">
+
+            <button class="category-btn active"
+                    data-category="all">
+                All Products
+            </button>
+
+            <button class="category-btn"
+                    data-category="Valves">
+                Valves
+            </button>
+
+            <button class="category-btn"
+                    data-category="Pipes">
+                Pipes
+            </button>
+
+            <button class="category-btn"
+                    data-category="Fittings">
+                Fittings
+            </button>
+
+            <button class="category-btn"
+                    data-category="Pumps">
+                Pumps
+            </button>
+
+            <button class="category-btn"
+                    data-category="Tanks">
+                Tanks
+            </button>
+
+            <button class="category-btn"
+                    data-category="Plumbing">
+                Plumbing
+            </button>
+
+        </div>
+
+
+        <!-- SEARCH -->
+
+        <div class="product-search">
+
+            <div class="search-box">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+                <input type="text"
+                       id="productSearch"
+                       placeholder="Search products..." />
+
+            </div>
+
+        </div>
+
+
+        <!-- PRODUCT GRID -->
+
+        <div class="product-grid"
+             id="productGrid">
+
+            @foreach (var product in Model)
+            {
+                <div class="product-card"
+                     data-category="@product.Category"
+                     data-name="@product.Name">
+
+                    <div class="product-image">
+
+                        <img src="@product.Image"
+                             alt="@product.Name" />
+
+                        <span class="product-category">
+                            @product.Category
+                        </span>
+
+                    </div>
+
+
+                    <div class="product-card-content">
+
+                        <h3>
+                            @product.Name
+                        </h3>
+
+                        <p>
+                            @product.Description
+                        </p>
+
+                        <div class="product-card-actions">
+
+                            <a asp-controller="Products"
+                               asp-action="Details"
+                               asp-route-id="@product.Id"
+                               class="product-link">
+
+                                View Details
+                                <span>→</span>
+
+                            </a>
+
+                            <a asp-controller="Wishlist"
+                               asp-action="Add"
+                               asp-route-id="@product.Id"
+                               class="wishlist-small-btn">
+
+                                ♡
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+
+        <div class="no-results"
+             id="noResults">
+
+            <h3>
+                No products found
+            </h3>
+
+            <p>
+                Try another search term or category.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const buttons =
+                document.querySelectorAll(".category-btn");
+
+            const cards =
+                document.querySelectorAll(".product-card");
+
+            const search =
+                document.getElementById("productSearch");
+
+            const noResults =
+                document.getElementById("noResults");
+
+            let category = "all";
+
+
+            function filterProducts() {
+
+                const searchTerm =
+                    search.value.toLowerCase();
+
+                let count = 0;
+
+
+                cards.forEach(function (card) {
+
+                    const cardCategory =
+                        card.dataset.category;
+
+                    const cardName =
+                        card.dataset.name.toLowerCase();
+
+
+                    const categoryMatch =
+                        category === "all" ||
+                        cardCategory === category;
+
+
+                    const searchMatch =
+                        cardName.includes(searchTerm);
+
+
+                    if (categoryMatch && searchMatch) {
+
+                        card.style.display = "";
+
+                        count++;
+
+                    }
+                    else {
+
+                        card.style.display = "none";
+
+                    }
+
+                });
+
+
+                noResults.style.display =
+                    count === 0 ? "block" : "none";
+
+            }
+
+
+            buttons.forEach(function (button) {
+
+                button.addEventListener("click", function () {
+
+                    buttons.forEach(function (btn) {
+
+                        btn.classList.remove("active");
+
+                    });
+
+                    button.classList.add("active");
+
+                    category =
+                        button.dataset.category;
+
+                    filterProducts();
+
+                });
+
+            });
+
+
+            search.addEventListener(
+                "input",
+                filterProducts
+            );
+
+        });
+
+    </script>
+
+}

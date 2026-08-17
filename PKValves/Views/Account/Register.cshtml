@@ -1,0 +1,245 @@
+﻿@model PKValves.Models.User
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<section class="auth-page">
+
+    <div class="auth-container">
+
+        <!-- LEFT SIDE -->
+
+        <div class="auth-image register-image">
+
+            <div class="auth-image-overlay"></div>
+
+            <div class="auth-image-content">
+
+                <span class="section-label">
+                    PK VALVES
+                </span>
+
+                <h1>
+                    Build your<br />
+                    <span>account.</span>
+                </h1>
+
+                <p>
+                    Create your PK Valves account to
+                    explore our products and stay
+                    connected with our solutions.
+                </p>
+
+                <div class="auth-features">
+
+                    <div>
+                        <span>✓</span>
+                        <p>Browse our product range</p>
+                    </div>
+
+                    <div>
+                        <span>✓</span>
+                        <p>Access your account</p>
+                    </div>
+
+                    <div>
+                        <span>✓</span>
+                        <p>Stay connected with PK Valves</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+
+        <div class="auth-form-container">
+
+            <div class="auth-form">
+
+                <span class="section-label">
+                    CREATE ACCOUNT
+                </span>
+
+                <h2>
+                    Register
+                </h2>
+
+                <p class="auth-subtitle">
+                    Create an account to get started.
+                </p>
+
+
+                <form asp-controller="Account"
+                      asp-action="Register"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+
+                    <!-- VALIDATION -->
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="validation-summary">
+                    </div>
+
+
+                    <!-- FULL NAME -->
+
+                    <div class="form-group">
+
+                        <label asp-for="FullName">
+                            Full Name
+                        </label>
+
+                        <input asp-for="FullName"
+                               placeholder="Enter your full name" />
+
+                        <span asp-validation-for="FullName"
+                              class="validation-message">
+                        </span>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label asp-for="Email">
+                            Email Address
+                        </label>
+
+                        <input asp-for="Email"
+                               placeholder="Enter your email address" />
+
+                        <span asp-validation-for="Email"
+                              class="validation-message">
+                        </span>
+
+                    </div>
+
+
+                    <!-- PHONE -->
+
+                    <div class="form-group">
+
+                        <label asp-for="Phone">
+                            Phone Number
+                        </label>
+
+                        <input asp-for="Phone"
+                               placeholder="Enter your phone number" />
+
+                        <span asp-validation-for="Phone"
+                              class="validation-message">
+                        </span>
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="form-group">
+
+                        <label asp-for="Password">
+                            Password
+                        </label>
+
+                        <input asp-for="Password"
+                               placeholder="Create a password" />
+
+                        <span asp-validation-for="Password"
+                              class="validation-message">
+                        </span>
+
+                    </div>
+
+
+                    <!-- CONFIRM PASSWORD -->
+
+                    <div class="form-group">
+
+                        <label asp-for="ConfirmPassword">
+                            Confirm Password
+                        </label>
+
+                        <input asp-for="ConfirmPassword"
+                               placeholder="Confirm your password" />
+
+                        <span asp-validation-for="ConfirmPassword"
+                              class="validation-message">
+                        </span>
+
+                    </div>
+
+
+                    <!-- TERMS -->
+
+                    <div class="terms-row">
+
+                        <label class="checkbox-label">
+
+                            <input type="checkbox"
+                                   required />
+
+                            <span>
+                                I agree to the terms and conditions
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- REGISTER -->
+
+                    <button type="submit"
+                            class="auth-submit">
+
+                        Create Account
+
+                        <span>→</span>
+
+                    </button>
+
+                </form>
+
+
+                <!-- LOGIN -->
+
+                <div class="auth-divider">
+                    <span>OR</span>
+                </div>
+
+                <p class="auth-switch">
+
+                    Already have an account?
+
+                    <a asp-controller="Account"
+                       asp-action="Login">
+
+                        Sign in
+
+                    </a>
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

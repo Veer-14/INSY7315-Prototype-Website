@@ -1,0 +1,243 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        @ViewData["Title"] - PK Valves
+    </title>
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+</head>
+
+<body>
+
+    <header class="navbar">
+
+        <div class="nav-container">
+
+            <a class="logo"
+               asp-controller="Home"
+               asp-action="Index">
+
+                <img src="~/images/pk-logo.png"
+                     alt="PK Valves"
+                     class="pk-logo" />
+
+            </a>
+
+
+            <nav class="nav-links">
+
+                <a asp-controller="Home"
+                   asp-action="Index">
+                    Home
+                </a>
+
+                <a asp-controller="Products"
+                   asp-action="Index">
+                    Products
+                </a>
+
+                <a href="/Home/Index#solutions">
+                    Solutions
+                </a>
+
+                <a href="/Home/Index#about">
+                    About
+                </a>
+
+                <a asp-controller="Contact"
+                   asp-action="Index">
+                    Contact
+                </a>
+
+                <a asp-controller="Wishlist"
+                   asp-action="Index"
+                   class="wishlist-nav">
+
+                    Wishlist
+
+                </a>
+
+            </nav>
+
+
+            <div class="nav-actions">
+
+                <a class="login-link"
+                   asp-controller="Account"
+                   asp-action="Login">
+
+                    Login
+
+                </a>
+
+                <a class="nav-button"
+                   asp-controller="Account"
+                   asp-action="Register">
+
+                    Register
+
+                </a>
+
+            </div>
+
+
+            <button class="menu-toggle"
+                    id="menuToggle">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <main>
+
+        @RenderBody()
+
+    </main>
+
+
+    <footer>
+
+        <div class="footer-container">
+
+            <div class="footer-brand">
+
+                <a class="logo footer-logo"
+                   asp-controller="Home"
+                   asp-action="Index">
+
+                    <img src="~/images/pk-logo.png"
+                         alt="PK Valves"
+                         class="pk-logo footer-logo-image" />
+
+                </a>
+
+                <p>
+                    Industrial and plumbing solutions
+                    you can depend on.
+                </p>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h4>Navigation</h4>
+
+                <a asp-controller="Home"
+                   asp-action="Index">
+                    Home
+                </a>
+
+                <a asp-controller="Products"
+                   asp-action="Index">
+                    Products
+                </a>
+
+                <a href="/Home/Index#about">
+                    About
+                </a>
+
+                <a asp-controller="Contact"
+                   asp-action="Index">
+                    Contact
+                </a>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h4>Solutions</h4>
+
+                <a href="/Home/Index#solutions">
+                    Valves
+                </a>
+
+                <a href="/Home/Index#solutions">
+                    Pipes
+                </a>
+
+                <a href="/Home/Index#solutions">
+                    Hoses
+                </a>
+
+                <a href="/Home/Index#solutions">
+                    Pumps
+                </a>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h4>Contact</h4>
+
+                <span>
+                    South Africa
+                </span>
+
+                <a href="mailto:info@pkvalves.co.za">
+                    info@pkvalves.co.za
+                </a>
+
+                <a href="tel:+27000000000">
+                    +27 00 000 0000
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <p>
+                © 2026 PK Valves cc.
+                All rights reserved.
+            </p>
+
+            <p>
+                Industrial & Plumbing Solutions
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <script src="~/js/site.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>

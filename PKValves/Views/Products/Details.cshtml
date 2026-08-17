@@ -1,0 +1,128 @@
+﻿@model PKValves.Models.Product
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<section class="product-details-page">
+
+    <div class="section-container">
+
+        <div class="breadcrumb">
+
+            <a asp-controller="Products"
+               asp-action="Index">
+
+                Products
+
+            </a>
+
+            <span> / </span>
+
+            <span>
+                @Model.Name
+            </span>
+
+        </div>
+
+
+        <div class="product-details-grid">
+
+            <!-- IMAGE -->
+
+            <div class="product-details-image">
+
+                <img src="@Model.Image"
+                     alt="@Model.Name" />
+
+                <span class="product-category">
+                    @Model.Category
+                </span>
+
+            </div>
+
+
+            <!-- INFORMATION -->
+
+            <div class="product-details-content">
+
+                <span class="section-label">
+                    @Model.Category
+                </span>
+
+                <h1>
+                    @Model.Name
+                </h1>
+
+                <p class="product-details-description">
+                    @Model.Description
+                </p>
+
+
+                
+
+                
+
+
+                <!-- ACTIONS -->
+
+                <div class="product-details-actions">
+
+                    <a asp-controller="Wishlist"
+                       asp-action="Add"
+                       asp-route-id="@Model.Id"
+                       class="wishlist-btn">
+
+                        ♡ Add to Wishlist
+
+                    </a>
+
+                    <a asp-controller="Contact"
+                       asp-action="Index"
+                       class="btn btn-primary">
+
+                        Request Information
+                        <span>→</span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="product-information-strip">
+
+    <div class="section-container">
+
+        <div>
+
+            <span class="section-label">
+                PK VALVES
+            </span>
+
+            <h2>
+                Reliable solutions for
+                <span>every application.</span>
+            </h2>
+
+        </div>
+
+        <a asp-controller="Products"
+           asp-action="Index"
+           class="product-link">
+
+            Browse More Products
+            <span>→</span>
+
+        </a>
+
+    </div>
+
+</section>

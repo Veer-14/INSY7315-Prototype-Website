@@ -1,0 +1,451 @@
+﻿@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<!-- =====================================================
+     CONTACT HERO
+===================================================== -->
+
+<section class="contact-hero">
+
+    <div class="contact-hero-overlay"></div>
+
+    <div class="contact-hero-content">
+
+        <span class="section-label">
+            GET IN TOUCH
+        </span>
+
+        <h1>
+            Let's talk about
+            <span>your project.</span>
+        </h1>
+
+        <p>
+            Whether you need valves, pipes, hoses, pumps,
+            tanks or plumbing solutions, our team is here
+            to help you find the right solution.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CONTACT SECTION
+===================================================== -->
+
+<section class="contact-section">
+
+    <div class="section-container">
+
+        <div class="contact-grid">
+
+
+            <!-- =================================================
+                 CONTACT INFORMATION
+            ================================================== -->
+
+            <div class="contact-information">
+
+                <span class="section-label">
+                    CONTACT PK VALVES cc
+                </span>
+
+                <h2>
+                    We're here to
+                    <span>help.</span>
+                </h2>
+
+                <p class="contact-intro">
+
+                    Have a question about a product,
+                    need technical information, or want
+                    to discuss your requirements?
+
+                    Get in touch with our team and we'll
+                    help you find the right solution.
+
+                </p>
+
+
+                <!-- EMAIL -->
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        ✉
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Email
+                        </span>
+
+                        <a href="mailto:info@pkvalves.co.za">
+                            info@pkvalves.co.za
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        ☎
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Phone
+                        </span>
+
+                        <a href="tel:+27000000000">
+                            +27 00 000 0000
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        ◷
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Business Hours
+                        </span>
+
+                        <p>
+                            Monday – Friday
+                            <br />
+                            08:00 – 17:00
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOCATION -->
+
+                <div class="contact-map">
+
+                    <a href="https://www.google.com/maps"
+                       target="_blank"
+                       rel="noopener noreferrer">
+
+                        <img src="~/images/map.png"
+                             alt="PK Valves Store Location" />
+
+                        <div class="map-overlay">
+
+                            <span class="map-pin">
+                                📍
+                            </span>
+
+                            <span>
+                                View on Google Maps
+                            </span>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+                
+
+                
+
+
+                <!-- SOCIAL / BRAND MESSAGE -->
+
+                <div class="contact-note">
+
+                    <strong>
+                        PK VALVES cc
+                    </strong>
+
+                    <p>
+                        Industrial & Plumbing Solutions
+                        you can depend on.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CONTACT FORM
+            ================================================== -->
+
+            <div class="contact-form-wrapper">
+
+                <div class="contact-form-header">
+
+                    <span class="section-label">
+                        SEND AN ENQUIRY
+                    </span>
+
+                    <h3>
+                        How can we help?
+                    </h3>
+
+                    <p>
+                        Complete the form below and our team
+                        will get back to you.
+                    </p>
+
+                </div>
+
+
+                <!-- SUCCESS MESSAGE -->
+                @if (TempData["ContactSuccess"] != null)
+                {
+
+                    <div class="contact-success">
+
+                        <div class="success-icon">
+                            ✓
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Message received
+                            </strong>
+
+                            <p>
+                                @TempData["ContactSuccess"]
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                }
+
+
+                <form asp-controller="Contact"
+                      asp-action="Submit"
+                      method="post"
+                      class="contact-form">
+
+
+                    <!-- NAME -->
+
+                    <div class="form-group">
+
+                        <label for="name">
+                            Full Name
+                        </label>
+
+                        <input type="text"
+                               id="name"
+                               name="name"
+                               placeholder="Enter your name"
+                               required />
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email Address
+                        </label>
+
+                        <input type="email"
+                               id="email"
+                               name="email"
+                               placeholder="Enter your email address"
+                               required />
+
+                    </div>
+
+
+                    <!-- PHONE -->
+
+                    <div class="form-group">
+
+                        <label for="phone">
+                            Phone Number
+                        </label>
+
+                        <input type="tel"
+                               id="phone"
+                               name="phone"
+                               placeholder="Enter your phone number" />
+
+                    </div>
+
+
+                    <!-- SUBJECT -->
+
+                    <div class="form-group">
+
+                        <label for="subject">
+                            What can we help you with?
+                        </label>
+
+                        <select id="subject"
+                                name="subject"
+                                required>
+
+                            <option value="">
+                                Select an option
+                            </option>
+
+                            <option value="Product Enquiry">
+                                Product Enquiry
+                            </option>
+
+                            <option value="Valves">
+                                Valves
+                            </option>
+
+                            <option value="Pipes">
+                                Pipes
+                            </option>
+
+                            <option value="Hoses">
+                                Hoses
+                            </option>
+
+                            <option value="Pumps">
+                                Pumps
+                            </option>
+
+                            <option value="Tanks">
+                                Tanks
+                            </option>
+
+                            <option value="Plumbing">
+                                Plumbing
+                            </option>
+
+                            <option value="General Enquiry">
+                                General Enquiry
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- MESSAGE -->
+
+                    <div class="form-group">
+
+                        <label for="message">
+                            Message
+                        </label>
+
+                        <textarea id="message"
+                                  name="message"
+                                  rows="5"
+                                  placeholder="Tell us how we can help..."
+                                  required></textarea>
+
+                    </div>
+
+
+                    <!-- SUBMIT -->
+
+                    <button type="submit"
+                            class="contact-submit">
+
+                        Send Enquiry
+
+                        <span>
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <p class="form-disclaimer">
+
+                        By submitting this form, you are
+                        requesting that PK Valves contact you
+                        regarding your enquiry.
+
+                    </p>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CONTACT CTA
+===================================================== -->
+
+<section class="contact-cta">
+
+    <div class="section-container">
+
+        <div class="contact-cta-content">
+
+            <span class="section-label">
+                PK VALVES
+            </span>
+
+            <h2>
+                Need the right solution?
+            </h2>
+
+            <p>
+                Explore our product range or speak to
+                our team about your requirements.
+            </p>
+
+        </div>
+
+
+        <div class="contact-cta-actions">
+
+            <a asp-controller="Products"
+               asp-action="Index"
+               class="btn btn-outline-light">
+
+                View Products
+                <span>→</span>
+
+            </a>
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="contact-home-link">
+
+                Back to Home
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
