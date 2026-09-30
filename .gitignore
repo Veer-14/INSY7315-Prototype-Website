@@ -361,3 +361,17 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Firebase / application secrets
+firebase-service-account.json
+
+# ASP.NET Core local configuration
+appsettings.Development.json
+appsettings.Local.json
+
+# Local environment files
+.env
+.env.*
+
+# User secrets
+secrets.json
