@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using PKValves.Services;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDistributedMemoryCache();
@@ -17,6 +18,8 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<ContactEmailService>();
 
 builder.Services.AddHttpClient<AccountApiService>(
     client =>

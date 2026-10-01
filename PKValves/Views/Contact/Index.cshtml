@@ -1,4 +1,6 @@
-﻿@{
+﻿@model PKValves.Models.ContactViewModel
+
+@{
     ViewData["Title"] = "Contact Us";
 }
 
@@ -85,7 +87,7 @@
                         </span>
 
                         <a href="mailto:info@pkvalves.co.za">
-                            info@pkvalves.co.za
+                            Sales1@pkvalves.co.za
                         </a>
 
                     </div>
@@ -108,7 +110,7 @@
                         </span>
 
                         <a href="tel:+27000000000">
-                            +27 00 000 0000
+                            033 342 4642
                         </a>
 
                     </div>
@@ -142,7 +144,7 @@
 
                 <div class="contact-map">
 
-                    <a href="https://www.google.com/maps"
+                    <a href="https://maps.app.goo.gl/EkT9i7bH8oKmFLKeA"
                        target="_blank"
                        rel="noopener noreferrer">
 
@@ -242,150 +244,96 @@
 
                 <form asp-controller="Contact"
                       asp-action="Submit"
+                      asp-antiforgery="true"
                       method="post"
                       class="contact-form">
 
-
-                    <!-- NAME -->
+                    <div asp-validation-summary="All"
+                         class="text-danger"
+                         role="alert"
+                         aria-live="polite">
+                    </div>
 
                     <div class="form-group">
+                        <label asp-for="Name">Full Name</label>
 
-                        <label for="name">
-                            Full Name
-                        </label>
-
-                        <input type="text"
-                               id="name"
-                               name="name"
+                        <input asp-for="Name"
+                               type="text"
+                               maxlength="100"
+                               autocomplete="name"
                                placeholder="Enter your name"
                                required />
-
                     </div>
 
-
-                    <!-- EMAIL -->
-
                     <div class="form-group">
+                        <label asp-for="Email">Email Address</label>
 
-                        <label for="email">
-                            Email Address
-                        </label>
-
-                        <input type="email"
-                               id="email"
-                               name="email"
+                        <input asp-for="Email"
+                               type="email"
+                               maxlength="254"
+                               autocomplete="email"
                                placeholder="Enter your email address"
                                required />
-
                     </div>
 
-
-                    <!-- PHONE -->
-
                     <div class="form-group">
+                        <label asp-for="Phone">Phone Number</label>
 
-                        <label for="phone">
-                            Phone Number
-                        </label>
-
-                        <input type="tel"
-                               id="phone"
-                               name="phone"
+                        <input asp-for="Phone"
+                               type="tel"
+                               maxlength="30"
+                               autocomplete="tel"
                                placeholder="Enter your phone number" />
-
                     </div>
 
-
-                    <!-- SUBJECT -->
-
                     <div class="form-group">
+                        <label asp-for="Subject">What can we help you with?</label>
 
-                        <label for="subject">
-                            What can we help you with?
-                        </label>
-
-                        <select id="subject"
-                                name="subject"
-                                required>
-
-                            <option value="">
-                                Select an option
-                            </option>
-
-                            <option value="Product Enquiry">
-                                Product Enquiry
-                            </option>
-
-                            <option value="Valves">
-                                Valves
-                            </option>
-
-                            <option value="Pipes">
-                                Pipes
-                            </option>
-
-                            <option value="Hoses">
-                                Hoses
-                            </option>
-
-                            <option value="Pumps">
-                                Pumps
-                            </option>
-
-                            <option value="Tanks">
-                                Tanks
-                            </option>
-
-                            <option value="Plumbing">
-                                Plumbing
-                            </option>
-
-                            <option value="General Enquiry">
-                                General Enquiry
-                            </option>
-
+                        <select asp-for="Subject" required>
+                            <option value="">Select an option</option>
+                            <option value="Product Enquiry">Product Enquiry</option>
+                            <option value="Valves">Valves</option>
+                            <option value="Pipes">Pipes</option>
+                            <option value="Hoses">Hoses</option>
+                            <option value="Pumps">Pumps</option>
+                            <option value="Tanks">Tanks</option>
+                            <option value="Plumbing">Plumbing</option>
+                            <option value="General Enquiry">General Enquiry</option>
                         </select>
-
                     </div>
 
-
-                    <!-- MESSAGE -->
-
                     <div class="form-group">
+                        <label asp-for="Message">Message</label>
 
-                        <label for="message">
-                            Message
-                        </label>
-
-                        <textarea id="message"
-                                  name="message"
+                        <textarea asp-for="Message"
                                   rows="5"
+                                  maxlength="5000"
                                   placeholder="Tell us how we can help..."
                                   required></textarea>
-
                     </div>
 
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <button type="submit" class="contact-submit">
+                            Send Enquiry
+                            <span>→</span>
+                        </button>
+                    }
+                    else
+                    {
+                        <p>Please log in before sending an enquiry.</p>
 
-                    <!-- SUBMIT -->
-
-                    <button type="submit"
-                            class="contact-submit">
-
-                        Send Enquiry
-
-                        <span>
-                            →
-                        </span>
-
-                    </button>
-
+                        <a asp-controller="Account"
+                           asp-action="Login"
+                           class="contact-submit">
+                            Log in to send an enquiry
+                            <span>→</span>
+                        </a>
+                    }
 
                     <p class="form-disclaimer">
-
-                        By submitting this form, you are
-                        requesting that PK Valves contact you
-                        regarding your enquiry.
-
+                        By submitting this form, you are requesting that
+                        PK Valves contact you regarding your enquiry.
                     </p>
 
                 </form>

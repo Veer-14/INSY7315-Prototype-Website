@@ -1,29 +1,62 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PKValves.Models;
+using PKValves.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PKValves.Controllers
 {
     public class ContactController : Controller
     {
-        public IActionResult Index()
+        private readonly ContactEmailService _emailService;
+        private readonly ILogger<ContactController> _logger;
+
+        public ContactController(
+            ContactEmailService emailService,
+            ILogger<ContactController> logger)
         {
-            return View();
+            _emailService = emailService;
+            _logger = logger;
         }
 
-        [HttpPost]
-        public IActionResult Submit(
-            string name,
-            string email,
-            string phone,
-            string subject,
-            string message)
+        [HttpGet]
+        public IActionResult Index()
         {
-            // Prototype only.
-            // No database or email service is used.
+            return View(new ContactViewModel());
+        }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Submit(
+            ContactViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Index", model);
+            }
 
-            TempData["ContactSuccess"] =
-                "Thank you for contacting PK Valves. Your enquiry has been received.";
+            try
+            {
+                await _emailService.SendEnquiryAsync(model);
 
-            return RedirectToAction("Index");
+                TempData["ContactSuccess"] =
+                    "Thank you. Your enquiry has been submitted successfully.";
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                // Record the failure type without logging enquiry contents.
+                _logger.LogError(
+                    "Contact email submission failed: {ErrorType}",
+                    ex.GetType().Name);
+
+                ModelState.AddModelError(
+                    string.Empty,
+                    "We could not confirm that your enquiry was sent. " +
+                    "Please try again later or contact us directly.");
+
+                return View("Index", model);
+            }
         }
     }
 }
