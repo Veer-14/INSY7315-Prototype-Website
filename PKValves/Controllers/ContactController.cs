@@ -7,12 +7,12 @@ namespace PKValves.Controllers
 {
     public class ContactController : Controller
     {
-        private readonly ContactEmailService _emailService;
+        private readonly IContactEmailService _emailService;
         private readonly ILogger<ContactController> _logger;
 
         public ContactController(
-            ContactEmailService emailService,
-            ILogger<ContactController> logger)
+       IContactEmailService emailService,
+       ILogger<ContactController> logger)
         {
             _emailService = emailService;
             _logger = logger;

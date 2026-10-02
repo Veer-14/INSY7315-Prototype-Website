@@ -3,9 +3,10 @@ using MailKit.Security;
 using MimeKit;
 using PKValves.Models;
 
+
 namespace PKValves.Services
 {
-    public class ContactEmailService
+    public class ContactEmailService : IContactEmailService
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<ContactEmailService> _logger;

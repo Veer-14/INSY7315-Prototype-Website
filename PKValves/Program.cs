@@ -19,7 +19,7 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<ContactEmailService>();
+builder.Services.AddScoped<IContactEmailService, ContactEmailService>();
 
 builder.Services.AddHttpClient<AccountApiService>(
     client =>
@@ -83,3 +83,6 @@ app.MapControllerRoute(
         "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+public partial class Program
+{
+}
