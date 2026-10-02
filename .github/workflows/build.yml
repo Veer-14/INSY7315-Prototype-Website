@@ -1,0 +1,32 @@
+name: PK Valves Build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build website and API
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Download repository code
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Install .NET 9
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore NuGet packages
+        run: dotnet restore PKValves.sln
+
+      - name: Build both projects
+        run: dotnet build PKValves.sln --configuration Release --no-restore
