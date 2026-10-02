@@ -1,4 +1,4 @@
-name: PK Valves Build
+name: PK Valves Build and Tests
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    name: Build website and API
+    name: Build and test
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -28,5 +28,8 @@ jobs:
       - name: Restore NuGet packages
         run: dotnet restore PKValves.sln
 
-      - name: Build both projects
+      - name: Build solution
         run: dotnet build PKValves.sln --configuration Release --no-restore
+
+      - name: Run automated tests
+        run: dotnet test PKValves.Tests/PKValves.Tests.csproj --configuration Release --no-build --no-restore --verbosity normal
