@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PKValves", "PKValves\PKValv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PKValves.API", "PKValves.API\PKValves.API.csproj", "{A631C418-A143-4C1D-940F-634AF8B90D64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PKValves.Tests", "PKValves.Tests\PKValves.Tests.csproj", "{A2EED9DE-CE26-44C5-9270-27FFD763CBED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A631C418-A143-4C1D-940F-634AF8B90D64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A631C418-A143-4C1D-940F-634AF8B90D64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A631C418-A143-4C1D-940F-634AF8B90D64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2EED9DE-CE26-44C5-9270-27FFD763CBED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2EED9DE-CE26-44C5-9270-27FFD763CBED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2EED9DE-CE26-44C5-9270-27FFD763CBED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2EED9DE-CE26-44C5-9270-27FFD763CBED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
