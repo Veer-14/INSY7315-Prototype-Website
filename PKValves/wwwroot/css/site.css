@@ -85,6 +85,7 @@ img {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
 }
 
 
@@ -120,9 +121,13 @@ img {
 /* NAVIGATION */
 
 .nav-links {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     align-items: center;
-    gap: 34px;
+    gap: 30px;
+    white-space: nowrap;
 }
 
     .nav-links a {
@@ -3850,3 +3855,310 @@ footer {
 .map-pin {
     font-size: 16px;
 }
+
+/* =========================================
+   Logged In User Account
+   ========================================= */
+
+.user-account-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.user-account-button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 7px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .user-account-button:hover {
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    }
+
+.user-account-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.user-account-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.user-account-status {
+    font-size: 11px;
+    color: #16a34a;
+    margin-top: 2px;
+}
+
+.user-account-arrow {
+    font-size: 14px;
+    color: #64748b;
+}
+
+.user-account-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 230px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    padding: 12px;
+    display: none;
+    z-index: 9999;
+}
+
+    .user-account-dropdown.show {
+        display: block;
+    }
+
+.dropdown-user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 5px 6px 10px;
+}
+
+    .dropdown-user-info strong {
+        color: #1f2937;
+        font-size: 14px;
+    }
+
+    .dropdown-user-info span {
+        color: #64748b;
+        font-size: 12px;
+        word-break: break-word;
+    }
+
+.dropdown-divider {
+    height: 1px;
+    background: #e5e7eb;
+    margin: 4px 0 8px;
+}
+
+.logout-button {
+    width: 100%;
+    background: transparent;
+    border: none;
+    text-align: left;
+    padding: 9px 7px;
+    border-radius: 7px;
+    color: #dc2626;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+    .logout-button:hover {
+        background: #fef2f2;
+    }
+
+/* =====================================================
+   LOGIN / REGISTER NAVIGATION
+===================================================== */
+
+.nav-auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+/* =====================================================
+   LOGGED-IN USER ACCOUNT
+===================================================== */
+
+.user-account-wrapper {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    position: relative;
+}
+
+
+/* User account button */
+
+.user-account-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 42px;
+    padding: 0 14px;
+    background: #ffffff;
+    border: 1px solid var(--navy);
+    border-radius: 5px;
+    color: var(--navy);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+    .user-account-button:hover {
+        background: var(--navy);
+        color: #ffffff;
+    }
+
+        .user-account-button:hover .user-account-name,
+        .user-account-button:hover .user-account-status,
+        .user-account-button:hover .user-account-arrow {
+            color: #ffffff;
+        }
+
+
+/* User name and status */
+
+.user-account-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.2;
+}
+
+.user-account-name {
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.user-account-status {
+    margin-top: 2px;
+    font-size: 9px;
+    font-weight: 600;
+    opacity: 0.65;
+}
+
+
+/* Arrow */
+
+.user-account-arrow {
+    font-size: 14px;
+    line-height: 1;
+}
+
+
+/* Dropdown */
+
+.user-account-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 220px;
+    padding: 14px;
+    background: #ffffff;
+    border: 1px solid rgba(20, 43, 61, 0.12);
+    border-radius: 6px;
+    box-shadow: 0 12px 30px rgba(20, 43, 61, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-5px);
+    transition: all 0.2s ease;
+    z-index: 1100;
+}
+
+    .user-account-dropdown.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+
+/* Dropdown user information */
+
+.dropdown-user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+    .dropdown-user-info strong {
+        color: var(--navy);
+        font-size: 12px;
+    }
+
+    .dropdown-user-info span {
+        color: var(--grey);
+        font-size: 10px;
+        word-break: break-word;
+    }
+
+
+/* Divider */
+
+.dropdown-divider {
+    height: 1px;
+    margin: 12px 0;
+    background: rgba(20, 43, 61, 0.1);
+}
+
+
+/* Logout */
+
+.logout-button {
+    width: 100%;
+    padding: 9px 12px;
+    background: var(--orange);
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+    .logout-button:hover {
+        background: var(--green);
+    }
+
+.nav-login,
+.nav-register {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    padding: 0 16px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: var(--transition);
+}
+
+
+/* LOGIN */
+
+.nav-login {
+    background: #ffffff;
+    color: var(--navy);
+    border: 1px solid var(--navy);
+}
+
+    .nav-login:hover {
+        background: var(--navy);
+        color: #ffffff;
+        transform: translateY(-2px);
+    }
+
+
+/* REGISTER */
+
+.nav-register {
+    background: var(--orange);
+    color: #ffffff;
+    border: 1px solid var(--orange);
+}
+
+    .nav-register:hover {
+        background: var(--green);
+        border-color: var(--green);
+        color: #ffffff;
+        transform: translateY(-2px);
+    }

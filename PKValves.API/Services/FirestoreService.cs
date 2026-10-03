@@ -51,7 +51,7 @@ namespace PKValves.API.Services
                 email = user.Email,
                 phone = user.Phone,
                 createdAt = Timestamp.FromDateTime(
-                    user.CreatedAt.ToUniversalTime())
+                    user.CreatedAt.ToDateTime())
             });
         }
 
@@ -70,7 +70,33 @@ namespace PKValves.API.Services
                 return null;
             }
 
-            return snapshot.ConvertTo<UserProfile>();
+            Dictionary<string, object> data =
+                snapshot.ToDictionary();
+
+            return new UserProfile
+            {
+                Uid = data.ContainsKey("uid")
+                    ? data["uid"]?.ToString() ?? uid
+                    : uid,
+
+                FullName = data.ContainsKey("fullName")
+                    ? data["fullName"]?.ToString() ?? ""
+                    : "",
+
+                Email = data.ContainsKey("email")
+                    ? data["email"]?.ToString() ?? ""
+                    : "",
+
+                Phone = data.ContainsKey("phone")
+                    ? data["phone"]?.ToString() ?? ""
+                    : "",
+
+                CreatedAt = data.ContainsKey("createdAt") &&
+                            data["createdAt"] is Timestamp timestamp
+                    ? timestamp
+                    : Timestamp.FromDateTime(
+                        DateTime.UtcNow)
+            };
         }
 
         

@@ -74,33 +74,95 @@
                 <a asp-controller="Wishlist"
                    asp-action="Index"
                    class="wishlist-nav">
-
                     Wishlist
-
                 </a>
 
             </nav>
 
 
-            <div class="nav-actions">
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                <div class="user-account-wrapper">
 
-                <a class="login-link"
-                   asp-controller="Account"
-                   asp-action="Login">
+                    <button type="button"
+                            class="user-account-button"
+                            id="userAccountButton">
 
-                    Login
+                        <div class="user-account-info">
 
-                </a>
+                            <span class="user-account-name">
+                                @User.Identity.Name
+                            </span>
 
-                <a class="nav-button"
-                   asp-controller="Account"
-                   asp-action="Register">
+                            <span class="user-account-status">
+                                Logged in
+                            </span>
 
-                    Register
+                        </div>
 
-                </a>
+                        <span class="user-account-arrow">
+                            ▾
+                        </span>
 
-            </div>
+                    </button>
+
+
+                    <div class="user-account-dropdown"
+                         id="userAccountDropdown">
+
+                        <div class="dropdown-user-info">
+
+                            <strong>
+                                @User.Identity.Name
+                            </strong>
+
+                            <span>
+                                @User.FindFirst(
+                                System.Security.Claims.ClaimTypes.Email
+                                                        )?.Value
+                        </span>
+
+                        </div>
+
+
+                        <div class="dropdown-divider"></div>
+
+
+                        <form asp-controller="Account"
+                              asp-action="Logout"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    class="logout-button">
+                                Log out
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+                        }
+            else
+            {
+                <div class="nav-auth-buttons">
+
+                    <a asp-controller="Account"
+                       asp-action="Login"
+                       class="nav-login">
+                        Login
+                    </a>
+
+                    <a asp-controller="Account"
+                       asp-action="Register"
+                       class="nav-register">
+                        Register
+                    </a>
+
+                </div>
+            }
 
 
             <button class="menu-toggle"
@@ -237,6 +299,47 @@
     <script src="~/js/site.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const button =
+                document.getElementById("userAccountButton");
+
+            const dropdown =
+                document.getElementById("userAccountDropdown");
+
+            if (!button || !dropdown) {
+                return;
+            }
+
+            button.addEventListener("click", function (event) {
+
+                event.stopPropagation();
+
+                dropdown.classList.toggle("show");
+
+            });
+
+
+            document.addEventListener("click", function () {
+
+                dropdown.classList.remove("show");
+
+            });
+
+
+            dropdown.addEventListener("click", function (event) {
+
+                event.stopPropagation();
+
+            });
+
+        });
+
+    </script>
 
 </body>
 

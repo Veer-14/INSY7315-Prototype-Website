@@ -74,6 +74,8 @@ namespace PKValves.Services
 
         public string Email { get; set; } = "";
 
+        public string FullName { get; set; } = "";
+
         public string IdToken { get; set; } = "";
     }
 }

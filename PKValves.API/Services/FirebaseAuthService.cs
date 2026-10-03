@@ -135,8 +135,7 @@ namespace PKValves.API.Services
             };
         }
 
-        private string GetFirebaseError(
-            string responseBody)
+        private string GetFirebaseError(string responseBody)
         {
             try
             {
@@ -159,24 +158,24 @@ namespace PKValves.API.Services
                         "The password is too weak.",
 
                     "EMAIL_NOT_FOUND" =>
-                        "No account was found with this email.",
+                        "Incorrect email or password.",
 
                     "INVALID_PASSWORD" =>
-                        "The password is incorrect.",
+                        "Incorrect email or password.",
+
+                    "INVALID_LOGIN_CREDENTIALS" =>
+                        "Incorrect email or password.",
 
                     "USER_DISABLED" =>
                         "This account has been disabled.",
 
-                    "OPERATION_NOT_ALLOWED" =>
-                        "Email and password authentication is disabled.",
-
                     _ =>
-                        "Authentication failed. Please try again."
+                        "Incorrect email or password."
                 };
             }
             catch
             {
-                return "Authentication failed. Please try again.";
+                return "Incorrect email or password.";
             }
         }
     }
