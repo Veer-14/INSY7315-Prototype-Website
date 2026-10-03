@@ -47,6 +47,19 @@ builder.Services.AddHttpClient<ProductApiService>(
             new Uri(baseUrl);
     });
 
+builder.Services.AddHttpClient<WishlistApiService>(
+    client =>
+    {
+        string baseUrl =
+            builder.Configuration[
+                "ApiSettings:BaseUrl"]
+            ?? throw new InvalidOperationException(
+                "API BaseUrl is missing.");
+
+        client.BaseAddress =
+            new Uri(baseUrl);
+    });
+
 builder.Services.AddAuthentication(
     CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

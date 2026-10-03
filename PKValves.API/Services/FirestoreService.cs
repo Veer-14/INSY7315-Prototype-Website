@@ -37,6 +37,11 @@ namespace PKValves.API.Services
             }.Build();
         }
 
+
+        // =====================================================
+        // USER METHODS
+        // =====================================================
+
         public async Task CreateUserAsync(UserProfile user)
         {
             DocumentReference document =
@@ -50,10 +55,10 @@ namespace PKValves.API.Services
                 fullName = user.FullName,
                 email = user.Email,
                 phone = user.Phone,
-                createdAt = Timestamp.FromDateTime(
-                    user.CreatedAt.ToDateTime())
+                createdAt = user.CreatedAt
             });
         }
+
 
         public async Task<UserProfile?> GetUserAsync(string uid)
         {
@@ -70,37 +75,13 @@ namespace PKValves.API.Services
                 return null;
             }
 
-            Dictionary<string, object> data =
-                snapshot.ToDictionary();
-
-            return new UserProfile
-            {
-                Uid = data.ContainsKey("uid")
-                    ? data["uid"]?.ToString() ?? uid
-                    : uid,
-
-                FullName = data.ContainsKey("fullName")
-                    ? data["fullName"]?.ToString() ?? ""
-                    : "",
-
-                Email = data.ContainsKey("email")
-                    ? data["email"]?.ToString() ?? ""
-                    : "",
-
-                Phone = data.ContainsKey("phone")
-                    ? data["phone"]?.ToString() ?? ""
-                    : "",
-
-                CreatedAt = data.ContainsKey("createdAt") &&
-                            data["createdAt"] is Timestamp timestamp
-                    ? timestamp
-                    : Timestamp.FromDateTime(
-                        DateTime.UtcNow)
-            };
+            return snapshot.ConvertTo<UserProfile>();
         }
 
-        
+
+        // =====================================================
         // PRODUCT METHODS
+        // =====================================================
 
         public async Task<List<Product>> GetProductsAsync()
         {
@@ -128,6 +109,7 @@ namespace PKValves.API.Services
                 .ToList();
         }
 
+
         public async Task<Product?> GetProductAsync(int id)
         {
             DocumentReference document =
@@ -144,6 +126,75 @@ namespace PKValves.API.Services
             }
 
             return snapshot.ConvertTo<Product>();
+        }
+
+
+        // =====================================================
+        // WISHLIST METHODS
+        // =====================================================
+
+        public async Task AddToWishlistAsync(
+            string uid,
+            int productId)
+        {
+            DocumentReference wishlistDocument =
+                _firestore
+                    .Collection("users")
+                    .Document(uid)
+                    .Collection("wishlist")
+                    .Document(productId.ToString());
+
+            await wishlistDocument.SetAsync(new
+            {
+                productId = productId,
+                addedAt = Timestamp.GetCurrentTimestamp()
+            });
+        }
+
+
+        public async Task RemoveFromWishlistAsync(
+            string uid,
+            int productId)
+        {
+            DocumentReference wishlistDocument =
+                _firestore
+                    .Collection("users")
+                    .Document(uid)
+                    .Collection("wishlist")
+                    .Document(productId.ToString());
+
+            await wishlistDocument.DeleteAsync();
+        }
+
+
+        public async Task<List<int>> GetWishlistProductIdsAsync(
+            string uid)
+        {
+            CollectionReference wishlistCollection =
+                _firestore
+                    .Collection("users")
+                    .Document(uid)
+                    .Collection("wishlist");
+
+            QuerySnapshot snapshot =
+                await wishlistCollection.GetSnapshotAsync();
+
+            List<int> productIds = new();
+
+            foreach (DocumentSnapshot document in snapshot.Documents)
+            {
+                if (!document.Exists)
+                {
+                    continue;
+                }
+
+                WishlistItem item =
+                    document.ConvertTo<WishlistItem>();
+
+                productIds.Add(item.ProductId);
+            }
+
+            return productIds;
         }
     }
 }

@@ -1,65 +1,165 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PKValves.Models;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using PKValves.Services;
 
 namespace PKValves.Controllers
 {
     public class WishlistController : Controller
     {
-        // Temporary wishlist storage.
-        // This will be replaced with Firestore
-        // in the next part.
-        private static readonly List<int> WishlistIds = new();
-
+        private readonly WishlistApiService _wishlistApi;
         private readonly ProductApiService _productApi;
 
-        public WishlistController(ProductApiService productApi)
+        public WishlistController(
+            WishlistApiService wishlistApi,
+            ProductApiService productApi)
         {
+            _wishlistApi = wishlistApi;
             _productApi = productApi;
         }
 
+
         // =====================================================
-        // WISHLIST PAGE
+        // DISPLAY USER WISHLIST
         // =====================================================
 
         public async Task<IActionResult> Index()
         {
-            List<Product> allProducts =
+            // User must be logged in
+            if (User.Identity == null ||
+                !User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction(
+                    "Login",
+                    "Account");
+            }
+
+            // Get Firebase UID from the logged-in user's claims
+            string? uid =
+                User.FindFirstValue(
+                    ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrWhiteSpace(uid))
+            {
+                return RedirectToAction(
+                    "Login",
+                    "Account");
+            }
+
+            // Get the user's saved wishlist products
+            List<PKValves.Models.Product> wishlistProducts =
+                await _wishlistApi.GetWishlistAsync(uid);
+
+            // Get ALL products for the existing Compare feature
+            List<PKValves.Models.Product> allProducts =
                 await _productApi.GetProductsAsync();
 
-            List<Product> wishlistProducts =
-                allProducts
-                    .Where(p => WishlistIds.Contains(p.Id))
-                    .ToList();
-
+            // The Wishlist view uses ViewBag.AllProducts
+            // for the Compare section.
             ViewBag.AllProducts = allProducts;
 
             return View(wishlistProducts);
         }
 
+
         // =====================================================
-        // ADD
+        // ADD PRODUCT TO WISHLIST
         // =====================================================
 
-        public IActionResult Add(int id)
+        [HttpGet]
+        public async Task<IActionResult> Add(int id)
         {
-            if (!WishlistIds.Contains(id))
+            // Wishlist requires the user to be logged in
+            if (User.Identity == null ||
+                !User.Identity.IsAuthenticated)
             {
-                WishlistIds.Add(id);
+                return RedirectToAction(
+                    "Login",
+                    "Account");
             }
 
-            return RedirectToAction("Index");
+            // Get Firebase UID
+            string? uid =
+                User.FindFirstValue(
+                    ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrWhiteSpace(uid))
+            {
+                return RedirectToAction(
+                    "Login",
+                    "Account");
+            }
+
+            // Add product to this user's Firestore wishlist
+            bool success =
+                await _wishlistApi.AddToWishlistAsync(
+                    uid,
+                    id);
+
+            if (success)
+            {
+                TempData["Success"] =
+                    "Product added to your wishlist.";
+            }
+            else
+            {
+                TempData["Error"] =
+                    "Unable to add product to your wishlist.";
+            }
+
+            return RedirectToAction(
+                "Index",
+                "Wishlist");
         }
 
+
         // =====================================================
-        // REMOVE
+        // REMOVE PRODUCT FROM WISHLIST
         // =====================================================
 
-        public IActionResult Remove(int id)
+        [HttpGet]
+        public async Task<IActionResult> Remove(int id)
         {
-            WishlistIds.Remove(id);
+            // Wishlist requires the user to be logged in
+            if (User.Identity == null ||
+                !User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction(
+                    "Login",
+                    "Account");
+            }
 
-            return RedirectToAction("Index");
+            // Get Firebase UID
+            string? uid =
+                User.FindFirstValue(
+                    ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrWhiteSpace(uid))
+            {
+                return RedirectToAction(
+                    "Login",
+                    "Account");
+            }
+
+            // Remove product from this user's Firestore wishlist
+            bool success =
+                await _wishlistApi.RemoveFromWishlistAsync(
+                    uid,
+                    id);
+
+            if (success)
+            {
+                TempData["Success"] =
+                    "Product removed from your wishlist.";
+            }
+            else
+            {
+                TempData["Error"] =
+                    "Unable to remove product from your wishlist.";
+            }
+
+            return RedirectToAction(
+                "Index",
+                "Wishlist");
         }
     }
 }
