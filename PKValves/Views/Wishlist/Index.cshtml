@@ -238,7 +238,7 @@
              id="compareResults">
 
             @foreach (var product in
-                        PKValves.Controllers.ProductsController.GetProducts())
+            (IEnumerable<PKValves.Models.Product>)ViewBag.AllProducts)
             {
 
                 <div class="compare-result"
@@ -355,8 +355,8 @@
 
         const products = {
 
-            @foreach (var product in
-                                                    PKValves.Controllers.ProductsController.GetProducts())
+        @foreach (var product in
+       (IEnumerable<PKValves.Models.Product>)ViewBag.AllProducts)
             {
                     <text>
 

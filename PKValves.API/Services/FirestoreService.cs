@@ -72,5 +72,52 @@ namespace PKValves.API.Services
 
             return snapshot.ConvertTo<UserProfile>();
         }
+
+        
+        // PRODUCT METHODS
+
+        public async Task<List<Product>> GetProductsAsync()
+        {
+            CollectionReference productsCollection =
+                _firestore.Collection("products");
+
+            QuerySnapshot snapshot =
+                await productsCollection.GetSnapshotAsync();
+
+            List<Product> products = new();
+
+            foreach (DocumentSnapshot document in snapshot.Documents)
+            {
+                if (document.Exists)
+                {
+                    Product product =
+                        document.ConvertTo<Product>();
+
+                    products.Add(product);
+                }
+            }
+
+            return products
+                .OrderBy(p => p.Id)
+                .ToList();
+        }
+
+        public async Task<Product?> GetProductAsync(int id)
+        {
+            DocumentReference document =
+                _firestore
+                    .Collection("products")
+                    .Document(id.ToString());
+
+            DocumentSnapshot snapshot =
+                await document.GetSnapshotAsync();
+
+            if (!snapshot.Exists)
+            {
+                return null;
+            }
+
+            return snapshot.ConvertTo<Product>();
+        }
     }
 }

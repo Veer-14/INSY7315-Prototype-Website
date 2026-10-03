@@ -1,29 +1,41 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PKValves.Models;
+using PKValves.Services;
 
 namespace PKValves.Controllers
 {
     public class WishlistController : Controller
     {
-        // Prototype only.
-        // No database is used.
+        // Temporary wishlist storage.
+        // This will be replaced with Firestore
+        // in the next part.
         private static readonly List<int> WishlistIds = new();
 
+        private readonly ProductApiService _productApi;
+
+        public WishlistController(ProductApiService productApi)
+        {
+            _productApi = productApi;
+        }
 
         // =====================================================
         // WISHLIST PAGE
         // =====================================================
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = ProductsController
-                .GetProducts()
-                .Where(p => WishlistIds.Contains(p.Id))
-                .ToList();
+            List<Product> allProducts =
+                await _productApi.GetProductsAsync();
 
-            return View(products);
+            List<Product> wishlistProducts =
+                allProducts
+                    .Where(p => WishlistIds.Contains(p.Id))
+                    .ToList();
+
+            ViewBag.AllProducts = allProducts;
+
+            return View(wishlistProducts);
         }
-
 
         // =====================================================
         // ADD
@@ -38,7 +50,6 @@ namespace PKValves.Controllers
 
             return RedirectToAction("Index");
         }
-
 
         // =====================================================
         // REMOVE
