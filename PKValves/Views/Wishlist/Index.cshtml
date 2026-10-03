@@ -2,15 +2,17 @@
 
 @{
     ViewData["Title"] = "My Wishlist";
+
+    var allProducts =
+        ViewBag.AllProducts as IEnumerable<PKValves.Models.Product>
+        ?? Enumerable.Empty<PKValves.Models.Product>();
 }
 
 <section class="wishlist-page">
 
     <div class="section-container">
 
-
         <!-- HEADER -->
-
         <div class="wishlist-header">
 
             <span class="section-label">
@@ -30,6 +32,23 @@
         </div>
 
 
+        <!-- SUCCESS / ERROR MESSAGES -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["Success"]
+            </div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["Error"]
+            </div>
+        }
+
+
+        <!-- EMPTY WISHLIST -->
         @if (!Model.Any())
         {
 
@@ -62,6 +81,8 @@
         }
         else
         {
+
+            <!-- WISHLIST PRODUCTS -->
 
             <div class="wishlist-grid">
 
@@ -117,14 +138,27 @@
                             </div>
 
 
-                            <a asp-controller="Wishlist"
-                               asp-action="Remove"
-                               asp-route-id="@product.Id"
-                               class="wishlist-remove">
+                            <!-- REMOVE MUST BE POST -->
 
-                                Remove from wishlist
+                            <form asp-controller="Wishlist"
+                                  asp-action="Remove"
+                                  method="post"
+                                  class="wishlist-remove-form">
 
-                            </a>
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="id"
+                                       value="@product.Id" />
+
+                                <button type="submit"
+                                        class="wishlist-remove">
+
+                                    Remove from wishlist
+
+                                </button>
+
+                            </form>
 
                         </div>
 
@@ -139,6 +173,7 @@
     </div>
 
 </section>
+
 
 
 <!-- =====================================================
@@ -237,19 +272,21 @@
         <div class="compare-results"
              id="compareResults">
 
-            @foreach (var product in
-            (IEnumerable<PKValves.Models.Product>)ViewBag.AllProducts)
+            @foreach (var product in allProducts)
             {
 
                 <div class="compare-result"
                      data-id="@product.Id"
-                     data-name="@product.Name.ToLower()"
+                     data-name="@product.Name.ToLowerInvariant()"
+                     data-product-name="@product.Name"
+                     data-product-image="@product.Image"
+                     data-product-category="@product.Category"
                      onclick="selectCompareProduct(
-                             @product.Id,
-                             '@product.Name',
-                             '@product.Image',
-                             '@product.Category'
-                         )">
+                         @product.Id,
+                         this.dataset.productName,
+                         this.dataset.productImage,
+                         this.dataset.productCategory
+                     )">
 
                     <div class="compare-result-image">
 
@@ -276,6 +313,8 @@
 
         </div>
 
+
+        <!-- NO RESULTS -->
 
         <div class="compare-no-results"
              id="compareNoResults">
@@ -340,6 +379,7 @@
 </div>
 
 
+
 @section Scripts {
 
     <script>
@@ -355,20 +395,17 @@
 
         const products = {
 
-        @foreach (var product in
-       (IEnumerable<PKValves.Models.Product>)ViewBag.AllProducts)
-            {
-                    <text>
-
-                    @product.Id: {
-                        id: @product.Id,
-                        name: "@product.Name",
-                        image: "@product.Image",
-                        category: "@product.Category"
-                    },
-
-                    </text>
-            }
+        @foreach (var product in allProducts)
+        {
+            <text>
+                @product.Id: {
+                            id: @product.Id,
+                            name: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(product.Name)),
+                            image: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(product.Image)),
+                            category: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(product.Category))
+                        },
+            </text>
+        }
 
         };
 
@@ -387,10 +424,19 @@
             const product =
                 products[productId];
 
+            if (!product) {
+                return;
+            }
+
 
             document.getElementById(
                 "compareCurrentImage"
             ).src = product.image;
+
+
+            document.getElementById(
+                "compareCurrentImage"
+            ).alt = product.name;
 
 
             document.getElementById(
@@ -530,6 +576,11 @@
             document.getElementById(
                 "selectedCompareImage"
             ).src = image;
+
+
+            document.getElementById(
+                "selectedCompareImage"
+            ).alt = name;
 
 
             document.getElementById(

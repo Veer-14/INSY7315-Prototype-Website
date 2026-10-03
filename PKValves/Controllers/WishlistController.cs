@@ -22,9 +22,9 @@ namespace PKValves.Controllers
         // DISPLAY USER WISHLIST
         // =====================================================
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            // User must be logged in
             if (User.Identity == null ||
                 !User.Identity.IsAuthenticated)
             {
@@ -33,7 +33,6 @@ namespace PKValves.Controllers
                     "Account");
             }
 
-            // Get Firebase UID from the logged-in user's claims
             string? uid =
                 User.FindFirstValue(
                     ClaimTypes.NameIdentifier);
@@ -45,16 +44,13 @@ namespace PKValves.Controllers
                     "Account");
             }
 
-            // Get the user's saved wishlist products
             List<PKValves.Models.Product> wishlistProducts =
                 await _wishlistApi.GetWishlistAsync(uid);
 
-            // Get ALL products for the existing Compare feature
+            // Needed by the existing Compare feature
             List<PKValves.Models.Product> allProducts =
                 await _productApi.GetProductsAsync();
 
-            // The Wishlist view uses ViewBag.AllProducts
-            // for the Compare section.
             ViewBag.AllProducts = allProducts;
 
             return View(wishlistProducts);
@@ -65,10 +61,10 @@ namespace PKValves.Controllers
         // ADD PRODUCT TO WISHLIST
         // =====================================================
 
-        [HttpGet]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(int id)
         {
-            // Wishlist requires the user to be logged in
             if (User.Identity == null ||
                 !User.Identity.IsAuthenticated)
             {
@@ -77,7 +73,6 @@ namespace PKValves.Controllers
                     "Account");
             }
 
-            // Get Firebase UID
             string? uid =
                 User.FindFirstValue(
                     ClaimTypes.NameIdentifier);
@@ -89,7 +84,6 @@ namespace PKValves.Controllers
                     "Account");
             }
 
-            // Add product to this user's Firestore wishlist
             bool success =
                 await _wishlistApi.AddToWishlistAsync(
                     uid,
@@ -116,10 +110,10 @@ namespace PKValves.Controllers
         // REMOVE PRODUCT FROM WISHLIST
         // =====================================================
 
-        [HttpGet]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Remove(int id)
         {
-            // Wishlist requires the user to be logged in
             if (User.Identity == null ||
                 !User.Identity.IsAuthenticated)
             {
@@ -128,7 +122,6 @@ namespace PKValves.Controllers
                     "Account");
             }
 
-            // Get Firebase UID
             string? uid =
                 User.FindFirstValue(
                     ClaimTypes.NameIdentifier);
@@ -140,7 +133,6 @@ namespace PKValves.Controllers
                     "Account");
             }
 
-            // Remove product from this user's Firestore wishlist
             bool success =
                 await _wishlistApi.RemoveFromWishlistAsync(
                     uid,

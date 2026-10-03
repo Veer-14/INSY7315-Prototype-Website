@@ -161,14 +161,29 @@
 
                             </a>
 
-                            <a asp-controller="Wishlist"
-                               asp-action="Add"
-                               asp-route-id="@product.Id"
-                               class="wishlist-small-btn">
 
-                                ♡
+                            <!-- ADD TO WISHLIST -->
 
-                            </a>
+                            <form asp-controller="Wishlist"
+                                  asp-action="Add"
+                                  method="post"
+                                  class="wishlist-add-form">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="id"
+                                       value="@product.Id" />
+
+                                <button type="submit"
+                                        class="wishlist-small-btn"
+                                        aria-label="Add @product.Name to wishlist">
+
+                                    ♡
+
+                                </button>
+
+                            </form>
 
                         </div>
 

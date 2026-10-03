@@ -59,23 +59,32 @@
                 </p>
 
 
-                
-
-                
-
-
                 <!-- ACTIONS -->
 
                 <div class="product-details-actions">
 
-                    <a asp-controller="Wishlist"
-                       asp-action="Add"
-                       asp-route-id="@Model.Id"
-                       class="wishlist-btn">
+                    <!-- ADD TO WISHLIST -->
 
-                        ♡ Add to Wishlist
+                    <form asp-controller="Wishlist"
+                          asp-action="Add"
+                          method="post"
+                          class="wishlist-add-form">
 
-                    </a>
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="id"
+                               value="@Model.Id" />
+
+                        <button type="submit"
+                                class="wishlist-btn">
+
+                            ♡ Add to Wishlist
+
+                        </button>
+
+                    </form>
+
 
                     <a asp-controller="Contact"
                        asp-action="Index"

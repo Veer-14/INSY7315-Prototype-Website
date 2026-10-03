@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net;
+using System.Net.Http.Json;
 using PKValves.Models;
 
 namespace PKValves.Services
@@ -7,22 +8,48 @@ namespace PKValves.Services
     {
         private readonly HttpClient _httpClient;
 
-        public ProductApiService(HttpClient httpClient)
+        public ProductApiService(
+            HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
-        public async Task<List<Product>> GetProductsAsync()
+
+        // =====================================================
+        // GET ALL PRODUCTS
+        // =====================================================
+
+        public async Task<List<Product>>
+            GetProductsAsync()
         {
             return await _httpClient
-                .GetFromJsonAsync<List<Product>>("api/products")
+                .GetFromJsonAsync<List<Product>>(
+                    "api/products")
                 ?? new List<Product>();
         }
 
-        public async Task<Product?> GetProductAsync(int id)
+
+        // =====================================================
+        // GET SINGLE PRODUCT
+        // =====================================================
+
+        public async Task<Product?>
+            GetProductAsync(int id)
         {
-            return await _httpClient
-                .GetFromJsonAsync<Product>($"api/products/{id}");
+            HttpResponseMessage response =
+                await _httpClient.GetAsync(
+                    $"api/products/{id}");
+
+            if (response.StatusCode ==
+                HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<Product>();
         }
     }
 }
