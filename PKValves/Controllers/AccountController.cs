@@ -26,36 +26,52 @@ namespace PKValves.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(
-            LoginViewModel model)
+     LoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            ApiAuthResponse? result =
-                await _accountApi.LoginAsync(model);
+            ApiAuthResponse? result = null;
+
+            try
+            {
+                result =
+                    await _accountApi.LoginAsync(model);
+            }
+            catch
+            {
+                ViewBag.Error =
+                    "Unable to connect to the server. Please try again.";
+
+                return View(model);
+            }
 
             if (result == null ||
                 !result.Success)
             {
                 ViewBag.Error =
-                    result?.Message
-                    ?? "Unable to log in.";
+                    result?.Message ??
+                    "Incorrect email or password.";
 
                 return View(model);
             }
 
             var claims = new List<Claim>
-            {
-                new Claim(
-                    ClaimTypes.NameIdentifier,
-                    result.Uid),
+    {
+        new Claim(
+            ClaimTypes.NameIdentifier,
+            result.Uid),
 
-                new Claim(
-                    ClaimTypes.Email,
-                    result.Email)
-            };
+        new Claim(
+            ClaimTypes.Name,
+            result.FullName),
+
+        new Claim(
+            ClaimTypes.Email,
+            result.Email)
+    };
 
             var identity =
                 new ClaimsIdentity(
@@ -81,14 +97,18 @@ namespace PKValves.Controllers
                 result.IdToken);
 
             TempData["Success"] =
-                "Welcome back! You have successfully logged in.";
+                "Welcome back, " + result.FullName + "!";
 
             return RedirectToAction(
                 "Index",
                 "Home");
         }
 
-        [HttpGet]
+
+
+       
+
+            [HttpGet]
         public IActionResult Register()
         {
             return View();

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Google.Cloud.Firestore;
+using Microsoft.AspNetCore.Mvc;
 using PKValves.API.Models;
 using PKValves.API.Services;
 
@@ -76,7 +77,7 @@ namespace PKValves.API.Controllers
                 FullName = request.FullName,
                 Email = request.Email,
                 Phone = request.Phone,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = Timestamp.FromDateTime(DateTime.UtcNow)
             };
 
             await _firestore.CreateUserAsync(user);
@@ -93,7 +94,7 @@ namespace PKValves.API.Controllers
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(
-            [FromBody] LoginRequest request)
+    [FromBody] LoginRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Email) ||
                 string.IsNullOrWhiteSpace(request.Password))
@@ -101,8 +102,7 @@ namespace PKValves.API.Controllers
                 return BadRequest(new
                 {
                     success = false,
-                    message =
-                        "Email and password are required."
+                    message = "Email and password are required."
                 });
             }
 
@@ -116,12 +116,20 @@ namespace PKValves.API.Controllers
                 return Unauthorized(result);
             }
 
+            // Get the user's profile from Firestore
+            UserProfile? user =
+                await _firestore.GetUserAsync(result.Uid);
+
+            string fullName =
+                user?.FullName ?? result.Email;
+
             return Ok(new
             {
                 success = true,
                 message = "Login successful.",
                 uid = result.Uid,
                 email = result.Email,
+                fullName = fullName,
                 idToken = result.IdToken
             });
         }
