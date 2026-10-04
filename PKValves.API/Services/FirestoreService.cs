@@ -11,24 +11,46 @@ namespace PKValves.API.Services
         public FirestoreService(IConfiguration configuration)
         {
             string projectId =
-                configuration["Firebase:ProjectId"]
+                Environment.GetEnvironmentVariable("Firebase__ProjectId")
+                ?? configuration["Firebase:ProjectId"]
                 ?? throw new InvalidOperationException(
                     "Firebase ProjectId is missing.");
 
-            string serviceAccountPath =
-                configuration["Firebase:ServiceAccountPath"]
-                ?? throw new InvalidOperationException(
-                    "Firebase service account path is missing.");
+            
 
-            if (!File.Exists(serviceAccountPath))
+            string? serviceAccountBase64 =
+                Environment.GetEnvironmentVariable(
+                    "FIREBASE_SERVICE_ACCOUNT_BASE64");
+
+            string? serviceAccountJson =
+                configuration["Firebase:ServiceAccountJson"];
+
+            // Azure
+            if (!string.IsNullOrWhiteSpace(serviceAccountBase64))
             {
-                throw new FileNotFoundException(
-                    "Firebase service account file was not found.",
-                    serviceAccountPath);
+                try
+                {
+                    byte[] jsonBytes =
+                        Convert.FromBase64String(serviceAccountBase64);
+
+                    serviceAccountJson =
+                        System.Text.Encoding.UTF8.GetString(jsonBytes);
+                }
+                catch (FormatException)
+                {
+                    throw new InvalidOperationException(
+                        "Firebase service account environment variable contains invalid Base64.");
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(serviceAccountJson))
+            {
+                throw new InvalidOperationException(
+                    "Firebase service account credentials are missing.");
             }
 
             GoogleCredential credential =
-                GoogleCredential.FromFile(serviceAccountPath);
+                GoogleCredential.FromJson(serviceAccountJson);
 
             _firestore = new FirestoreDbBuilder
             {

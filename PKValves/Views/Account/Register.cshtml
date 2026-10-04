@@ -152,36 +152,40 @@
 
                     <div class="form-group">
 
+                        
                         <label asp-for="Password">
                             Password
                         </label>
 
                         <input asp-for="Password"
+                               type="password"
                                placeholder="Create a password" />
 
                         <span asp-validation-for="Password"
                               class="validation-message">
                         </span>
-
+                       
                     </div>
-
 
                     <!-- CONFIRM PASSWORD -->
 
                     <div class="form-group">
 
-                        <label asp-for="ConfirmPassword">
+                         <label asp-for="ConfirmPassword">
                             Confirm Password
                         </label>
 
                         <input asp-for="ConfirmPassword"
+                               type="password"
                                placeholder="Confirm your password" />
 
                         <span asp-validation-for="ConfirmPassword"
                               class="validation-message">
                         </span>
+                        
 
                     </div>
+
 
 
                     <!-- TERMS -->

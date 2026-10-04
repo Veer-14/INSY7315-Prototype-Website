@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpClient<FirebaseAuthService>();
@@ -15,13 +14,20 @@ builder.Services.AddHttpClient<FirebaseAuthService>();
 builder.Services.AddSingleton<FirestoreService>();
 
 
-// FIREBASE JWT AUTHENTICATION
-
+// =====================================================
+// FIREBASE PROJECT ID
+// =====================================================
 
 string firebaseProjectId =
-    builder.Configuration["Firebase:ProjectId"]
+    Environment.GetEnvironmentVariable("Firebase__ProjectId")
+    ?? builder.Configuration["Firebase:ProjectId"]
     ?? throw new InvalidOperationException(
         "Firebase ProjectId is missing.");
+
+
+// =====================================================
+// FIREBASE JWT AUTHENTICATION
+// =====================================================
 
 builder.Services.AddAuthentication(
     JwtBearerDefaults.AuthenticationScheme)
@@ -53,13 +59,25 @@ builder.Services.AddAuthentication(
 builder.Services.AddAuthorization();
 
 
+// =====================================================
+// BUILD APPLICATION
+// =====================================================
+
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+// =====================================================
+// SWAGGER
+// =====================================================
+
+// Enabled on Azure as well as locally
+app.UseSwagger();
+app.UseSwaggerUI();
+
+
+// =====================================================
+// MIDDLEWARE
+// =====================================================
 
 app.UseHttpsRedirection();
 
@@ -70,3 +88,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
