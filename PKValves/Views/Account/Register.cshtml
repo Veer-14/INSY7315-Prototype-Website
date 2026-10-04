@@ -1,4 +1,4 @@
-﻿@model PKValves.Models.User
+﻿@model PKValves.Models.RegisterViewModel
 
 @{
     ViewData["Title"] = "Register";
@@ -73,6 +73,12 @@
                     Create an account to get started.
                 </p>
 
+                @if (ViewBag.Error != null)
+                {
+                    <div class="validation-summary" role="alert">
+                        @ViewBag.Error
+                    </div>
+                }
 
                 <form asp-controller="Account"
                       asp-action="Register"
