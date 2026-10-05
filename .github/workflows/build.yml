@@ -20,10 +20,10 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install .NET 9
+         - name: Install .NET 10
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '10.0.x'
 
       - name: Restore NuGet packages
         run: dotnet restore PKValves.sln
